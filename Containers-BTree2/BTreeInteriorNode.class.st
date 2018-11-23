@@ -2,7 +2,7 @@ Class {
 	#name : #BTreeInteriorNode,
 	#superclass : #BTreeNode,
 	#type : #variable,
-	#category : #'Containers-BTree2'
+	#category : #'Containers-BTree2-Core'
 }
 
 { #category : #'as yet unclassified' }

@@ -1,10 +1,26 @@
+"
+A B-Tree of order m is a search tree, where the data 
+  (or pointers to it) is stored at the leaves, such that:
+
+  1) the root is either a leaf (as well--i.e. the tree is 
+     a single node) or has between 2 and m children
+
+  2) all other (non-root) nodes have at least m/2 children,
+     but no more than m children
+
+  3) all leaves are at the same depth
+Since each interior node has as many as m pointers to its children, they must also keep ""search"" data to point the search in the right direction.
+So, an interior node with n children, will have n pointers (p1 to pn) to those children; it will also have n-1 keys (k1 to kn-1), where ki is the smallest key stored in the tree pointed to by pi+1.
+
+Note that some entries in a node can be null--its just important that the key and its matching pointer are both null.
+"
 Class {
 	#name : #BTree,
 	#superclass : #Collection,
 	#instVars : [
 		'root'
 	],
-	#category : #'Containers-BTree2'
+	#category : #'Containers-BTree2-Core'
 }
 
 { #category : #'as yet unclassified' }

@@ -10,7 +10,7 @@ Class {
 		'threeWeeks',
 		'timespans'
 	],
-	#category : #'Containers-BTree2'
+	#category : #'Containers-BTree2-Tests'
 }
 
 { #category : #'as yet unclassified' }
@@ -30,13 +30,13 @@ DateTreeTest >> setUp [
 	timespans add: (Timespan starting: sixHours ending: (sixHours + 6 hours)).
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 DateTreeTest >> testAdd [
 	| dateRanges timespan |
 	dateRanges := DateTree new.
 	timespan := Timespan starting: now ending: twoWeeks.
 	dateRanges at: timespan put: timespan.
-	self assert: ((dateRanges at: timespan) = timespan)
+	self assert: (dateRanges at: timespan) equals: timespan
 ]
 
 { #category : #'as yet unclassified' }
@@ -47,7 +47,7 @@ DateTreeTest >> testClipEndRange [
 	timespans do: [ :ea | dateRanges at: ea put: ea asString ].
 	expectedDates := timespans select: [ :ea | (ea start >= now) and: [ ea end <= nextWeek ]] thenCollect: [ :ea | ea asString ].
 	returnedDates := (dateRanges between: now and: nextWeek) collect: [ :ea | ea asString ].
-	self assert: (returnedDates intersection: expectedDates) size = expectedDates size.
+	self assert: (returnedDates intersection: expectedDates) size equals: expectedDates size.
 ]
 
 { #category : #'as yet unclassified' }
@@ -58,7 +58,7 @@ DateTreeTest >> testClipStartRange [
 	timespans do: [ :ea | dateRanges at: ea put: ea asString ].
 	expectedDates := timespans select: [ :ea | (ea start >= nextWeek) and: [ ea end <= twoWeeks ]] thenCollect: [ :ea | ea asString ].
 	returnedDates := (dateRanges between: nextWeek and: twoWeeks) collect: [ :ea | ea asString ].
-	self assert: (returnedDates intersection: expectedDates) size = expectedDates size.
+	self assert: (returnedDates intersection: expectedDates) size equals: expectedDates size.
 ]
 
 { #category : #'as yet unclassified' }
@@ -86,7 +86,7 @@ DateTreeTest >> testInclusiveRange [
 	timespans do: [ :ea | dateRanges at: ea put: ea asString ].
 	expectedDates := timespans collect: [ :ea | ea asString ].
 	returnedDates := (dateRanges between: now and: threeWeeks) collect: [ :ea | ea asString ].
-	self assert: (returnedDates intersection: expectedDates) size = expectedDates size.
+	self assert: (returnedDates intersection: expectedDates) size equals: expectedDates size.
 ]
 
 { #category : #'as yet unclassified' }

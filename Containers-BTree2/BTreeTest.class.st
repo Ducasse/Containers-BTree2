@@ -1,10 +1,10 @@
 Class {
 	#name : #BTreeTest,
 	#superclass : #TestCase,
-	#category : #'Containers-BTree2'
+	#category : #'Containers-BTree2-Tests'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #helpers }
 BTreeTest >> assertConsistent: aBTree [
 	| depths root |
 	root := aBTree root.
@@ -28,10 +28,10 @@ A B-Tree of order m is a search tree, where the data
 
 	depths := Set new.
 	root withAllChildrenDo: [:ea | ea isLeaf ifTrue: [depths add: ea depth]].
-	self assert: depths size = 1.
+	self assert: depths size equals: 1.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #helpers }
 BTreeTest >> assertSorted: aTree [
 	| last |
 	last := nil.
@@ -41,18 +41,18 @@ BTreeTest >> assertSorted: aTree [
 		last := k]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #helpers }
 BTreeTest >> checkTree: tree array: pairArray [
 	pairArray withIndexDo:
 		[:pair :i |
 		tree at: pair first put: pair second.
-		self assert: tree size = i.
+		self assert: tree size equals: i.
 		"self assertConsistent: tree.
 		self assertSorted: tree"].
 	pairArray shuffled do:
 		[:pair |
-		self assert: (tree at: pair first) = pair second].
-	self assert: tree size = pairArray size.
+		self assert: (tree at: pair first) equals: pair second].
+	self assert: tree size equals: pairArray size.
 	self assertConsistent: tree.
 	self assertSorted: tree.
 	^ tree
@@ -60,29 +60,29 @@ BTreeTest >> checkTree: tree array: pairArray [
 	 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #helpers }
 BTreeTest >> checkTree: tree items: count [
 	| pairArray  |
 	pairArray := ((1 to: count) collect: [:i | Array with: i asString with: i]) shuffled.
 	self checkTree: tree array: pairArray
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #helpers }
 BTreeTest >> checkTreeWithOrder: order items: count [
 	self checkTree: (BTree order: order) items: count
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testAddAndRetrieveWithSplit [
 	self checkTreeWithOrder: 4 items: 5
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testAddAndRetrieveWithTwoSplits [
 	self checkTreeWithOrder: 4 items: 17
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testCommonKeysDifferentValues [
 	| large small expectedResults results |
 	large := BTree new.
@@ -96,16 +96,16 @@ BTreeTest >> testCommonKeysDifferentValues [
 	large commonKeysWith: small keysAndValuesDo:
 		[:k :v1 :v2 |
 		results add: (Array with: k with: v1 with: v2)].
-	self assert: results = expectedResults.
+	self assert: results equals: expectedResults.
 	
 	results := OrderedCollection new.
 	small commonKeysWith: large keysAndValuesDo:
 		[:k :v1 :v2 |
 		results add: (Array with: k with: v2 with: v1)].
-	self assert: results = expectedResults
+	self assert: results equals: expectedResults
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testCommonKeysSameValues [
 	| large small expectedResults results |
 	large := BTree new.
@@ -119,21 +119,21 @@ BTreeTest >> testCommonKeysSameValues [
 	large commonKeysWith: small keysAndValuesDo:
 		[:k :v1 :v2 |
 		results add: (Array with: k with: v1 with: v2)].
-	self assert: results = expectedResults.
+	self assert: results equals: expectedResults.
 	
 	results := OrderedCollection new.
 	small commonKeysWith: large keysAndValuesDo:
 		[:k :v1 :v2 |
 		results add: (Array with: k with: v2 with: v1)].
-	self assert: results = expectedResults
+	self assert: results equals: expectedResults
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testEmptyTree [
 	self checkTreeWithOrder: 5 items: 0
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testFirstLast [
 	| tree |
 	tree := BTree new.
@@ -143,66 +143,66 @@ BTreeTest >> testFirstLast [
 	tree at: SmallInteger maxVal put: SmallInteger maxVal.
 	10000 timesRepeat: [ 
 		tree at: 536870911 atRandom put: nil.
-		self assert: tree first = SmallInteger minVal.
-		self assert: tree last = SmallInteger maxVal ]
+		self assert: tree first equals: SmallInteger minVal.
+		self assert: tree last equals: SmallInteger maxVal ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testLargeTree [
 	self checkTreeWithOrder: 8 items: 5000
 	
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testMissing [
 	| tree |
 	tree := BTree new.
 	tree at: 1 put: 'foo'.
 	tree at: 2 put: 'bar'.
-	self assert: (tree at: 1 ifAbsent: [42]) = 'foo'.
-	self assert: (tree at: 2 ifAbsent: [42]) = 'bar'.
-	self assert: (tree at: 3 ifAbsent: [42]) = 42.
+	self assert: (tree at: 1 ifAbsent: [42]) equals: 'foo'.
+	self assert: (tree at: 2 ifAbsent: [42]) equals: 'bar'.
+	self assert: (tree at: 3 ifAbsent: [42]) equals: 42.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testMultipleAddAndRetrieve [
 	self checkTreeWithOrder: 5 items: 3
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testRange [
 	| tree keys |
 	tree := BTree new.
 	1 to: 100 by: 2 do: [:ea | tree at: ea put: ea * 2].
-	self assert: tree size = 50.
+	self assert: tree size equals: 50.
 	keys := OrderedCollection new.
 	tree from: 12 to: 19 keysAndValuesDo:
 		[:k :v |
-		self assert: k * 2 = v.
+		self assert: k * 2 equals: v.
 		keys add: k].
-	self assert: keys asArray = #(13 15 17 19).
+	self assert: keys asArray equals: #(13 15 17 19).
 	self assertSorted: tree.
 	self assertConsistent: tree.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testRemoval [
 	| tree |
 	tree := BTree new.
 	#(a b c d e f g h i j k l) do: [:ea | tree at: ea put: ea, '!'].
-	self assert: tree size = 12.
+	self assert: tree size equals: 12.
 	tree removeKey: #d.
-	self assert: tree size = 11.
-	self assert: (tree at: #d ifAbsent: [32]) = 32.
+	self assert: tree size equals: 11.
+	self assert: (tree at: #d ifAbsent: [32]) equals: 32.
 	tree removeKey: #k.
-	self assert: tree size = 10.
-	self assert: (tree at: #k ifAbsent: [32]) = 32.
+	self assert: tree size equals: 10.
+	self assert: (tree at: #k ifAbsent: [32]) equals: 32.
 	self assertSorted: tree.
 	self assertConsistent: tree.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testRemoval2 [
 	| tree |
 	tree := BTree new.
@@ -211,56 +211,56 @@ BTreeTest >> testRemoval2 [
 	self assert: tree isEmpty
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testRemoveAll [
 	| tree |
 	tree := BTree new.
 	#(a b c d e f g h i j k l) do: [:ea | tree at: ea put: ea, '!'].
-	self assert: tree size = 12.
+	self assert: tree size equals: 12.
 	#(a b c d e f g h i j k l)  shuffled do: [:ea | tree removeKey: ea].
-	self assert: tree size = 0.
+	self assert: tree size equals: 0.
 
 	self assertSorted: tree.
 	self assertConsistent: tree.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testRemoveAllFailing [
 	| tree |
 	tree := BTree new.
 	#(a b c d e f g h i j k l) do: [:ea | tree at: ea put: ea, '!'].
-	self assert: tree size = 12.
+	self assert: tree size equals: 12.
 	#(#c #j #g #i #k #l #f #e #d #h #a #b) do: [:ea | tree removeKey: ea].
-	self assert: tree size = 0.
+	self assert: tree size equals: 0.
 
 	self assertSorted: tree.
 	self assertConsistent: tree.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testRemoveLots [
 	| tree |
 	tree := BTree new.
 	#(a b c d e f g h i j k l) do: [:ea | tree at: ea put: ea, '!'].
-	self assert: tree size = 12.
+	self assert: tree size equals: 12.
 	#(a c e g i k) shuffled do: [:ea | tree removeKey: ea].
-	self assert: tree size = 6.
+	self assert: tree size equals: 6.
 
 	self assertSorted: tree.
 	self assertConsistent: tree.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testSimpleAddAndRetrieve [
 	self checkTreeWithOrder: 5 items: 1
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testStoreNil [
 	self checkTree: BTree new array: {{'x'. 1}. {'y'. nil}}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BTreeTest >> testStringKeys [
 	self checkTree: (BTree keys: BTreeStringKeys new) items: 100
 ]

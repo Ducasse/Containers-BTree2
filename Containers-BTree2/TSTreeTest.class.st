@@ -5,17 +5,17 @@ Class {
 		'tree',
 		'empty'
 	],
-	#category : #'Containers-BTree2'
+	#category : #'Containers-BTree2-Tests'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #setUp }
 TSTreeTest >> setUp [
 	tree := TSTree new.
 	self words shuffled do: [:ea | tree at: ea put: ea asUppercase].
 	empty := TSTree new.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 TSTreeTest >> testAt [
 	self assert: (tree at: 'abear') = 'ABEAR'.
 	self assert: (tree at: 'abelmosk') = 'ABELMOSK'.
@@ -24,7 +24,7 @@ TSTreeTest >> testAt [
 	self assert: (empty at: 'foo' ifAbsent: [42]) = 42 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 TSTreeTest >> testMatch [
 	self assert: (tree matchesForString: 'abea' distance: 1) asSet = #(ABEAM ABEAR ABED ABEL ABET ABE) asSet.
 	self assert: (tree matchesForString: 'abel' distance: 2) asSet = #(ABELIA ABEAM ABEAR) asSet.
@@ -33,7 +33,7 @@ TSTreeTest >> testMatch [
 	self assert: (empty matchesForString: 'foo' distance: 0) = #()
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 TSTreeTest >> testPrefix [
 	self assert: (tree matchesForPrefix: 'abet') asSet = #(ABET ABETMENT) asSet.
 	self assert: (tree matchesForPrefix: 'abelm') asSet = #(ABELMOSCHUS ABELMOSK) asSet.
@@ -41,7 +41,7 @@ TSTreeTest >> testPrefix [
 	self assert: (empty matchesForPrefix: 'foo') = #()
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 TSTreeTest >> testRemove [
 	self assert: (tree at: 'abel') = 'ABEL'.
 	self assert: (tree removeKey: 'abel') = 'ABEL'.
@@ -51,13 +51,13 @@ TSTreeTest >> testRemove [
 	self assert: (tree removeKey: 'abel' ifAbsent: [42]) = 42.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 TSTreeTest >> testValues [
 	self assert: tree values asSet = (self words asSet collect: [:ea | ea asUppercase]).
 	self assert: empty values isEmpty
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 TSTreeTest >> words [
 	^ #(
 abe

@@ -8,7 +8,7 @@ Class {
 		'high',
 		'equal'
 	],
-	#category : #'Containers-BTree2'
+	#category : #'Containers-BTree2-Core'
 }
 
 { #category : #'as yet unclassified' }
@@ -18,10 +18,10 @@ TSTreeNode class >> key: aCharacter [
 
 { #category : #private }
 TSTreeNode >> canBeCulled [
-	^ self value isNil
-		and: [low isNil]
-		and: [equal isNil]
-		and: [high isNil]
+	^ ((self value isNil
+		and: [low isNil])
+			and: [equal isNil])
+				and: [high isNil]
 ]
 
 { #category : #private }
